@@ -138,6 +138,38 @@ export default function AssetTable() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("https://localhost:7252/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          Name: "se",
+          Password: "0123456789",
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Login failed! Status: ${response.status}`);
+        console.log("shit");
+        console.log(response.json);
+      }
+  
+      const data = await response.json();
+      console.log("Login Success:", data);
+  
+      // Optional: Store token if returned
+      // localStorage.setItem("token", data.token);
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed. Please check the credentials or server.");
+    }
+  };
+  
+
   return (
     <div>
       <h1 className="underline font-bold pl-1.5 text-2xl mt-20 flex item-center justify-center">
@@ -342,6 +374,9 @@ export default function AssetTable() {
               </tr>
                 </tbody>
         </table>
+        <button onClick={handleLogin} className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Login</button>
+
+
 
       </div>
     </div>
