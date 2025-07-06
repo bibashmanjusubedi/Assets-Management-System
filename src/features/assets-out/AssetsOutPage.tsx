@@ -329,6 +329,20 @@ export default function AssetTable() {
               ))}
           </tbody>
         </table>
+        <h1>hello</h1>
+        <table className="w-full table-auto border-2" >
+                <tbody>
+                  <tr>
+                    <th className="px-4 py-3 border-r-2">Out To From Backend</th>
+                    <th className="px-4 py-3 border-r-2">Outdate from Backend</th>
+                    <th className="px-4 py-3 border-r-2">Date To Return from Backend</th>
+                    <th className="px-4 py-3 border-r-2">Return Date from Backend</th>
+                    <th className="px-4 py-3 border-r-2">Asset Detail from Backend</th>
+                    <th className="px-4 py-3 border-r-2">Remarks from Backend</th>
+              </tr>
+                </tbody>
+        </table>
+
       </div>
     </div>
   );
