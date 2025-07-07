@@ -415,32 +415,35 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-  
 } from "recharts";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { CornerDownLeft, FileChartColumnIncreasing, Grid2X2Plus, Plus, User, Wrench, Zap } from "lucide-react";
+import {
+  CornerDownLeft,
+  FileChartColumnIncreasing,
+  Grid2X2Plus,
+  Plus,
+  User,
+  Wrench,
+  Zap,
+} from "lucide-react";
+import { api } from "@/lib/api";
 
-function useCountUp(target: number, duration = 1000) {
+function useCountUp(route: string) {
   const [count, setCount] = useState(0);
   useEffect(() => {
-    let start = 0;
-    const increment = target / (duration / 16);
-    let raf: number;
-    function animate() {
-      start += increment;
-      if (start < target) {
-        setCount(Math.floor(start));
-        raf = requestAnimationFrame(animate);
-      } else {
-        setCount(target);
+    async function animate() {
+      try {
+        const res = await api.get(route);
+        setCount(res.data);
+      } catch (err) {
+        throw Error(String(err));
       }
     }
     animate();
-    return () => cancelAnimationFrame(raf);
-  }, [target, duration]);
+  }, [route]);
   return count;
 }
 
@@ -502,9 +505,9 @@ const Statistics = () => {
     threshold: 0.1,
   });
 
-  const totalAssets = useCountUp(TOTAL_ASSETS);
-  const assignedAssets = useCountUp(ASSIGNED_ASSETS);
-  const maintenanceAssets = useCountUp(MAINTENANCE_ASSETS);
+  const totalAssets = useCountUp("/Asset/Count");
+  const assignedAssets = useCountUp("ASSIGNED_ASSETS");
+  const maintenanceAssets = useCountUp("MAINTENANCE_ASSETS");
 
   const assignedPercent = Math.round((ASSIGNED_ASSETS / TOTAL_ASSETS) * 100);
   const maintenancePercent = Math.round(
