@@ -415,11 +415,13 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  
 } from "recharts";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { CornerDownLeft, FileChartColumnIncreasing, Grid2X2Plus, Plus, User, Wrench, Zap } from "lucide-react";
 
 function useCountUp(target: number, duration = 1000) {
   const [count, setCount] = useState(0);
@@ -448,31 +450,31 @@ const MAINTENANCE_ASSETS = 40;
 
 const activities = [
   {
-    icon: BsPersonFill,
+    icon: User,
     message: "Laptop assigned to Ram",
     time: "5 min ago",
     color: "text-blue-500",
   },
   {
-    icon: PiKeyReturnBold,
+    icon: CornerDownLeft,
     message: "Mouse returned by Sita",
     time: "1 hr ago",
     color: "text-green-500",
   },
   {
-    icon: BsPersonFill,
+    icon: User,
     message: "Chair assigned to Hari",
     time: "2 days ago",
     color: "text-blue-500",
   },
   {
-    icon: PiKeyReturnBold,
+    icon: CornerDownLeft,
     message: "Printer returned by Gita",
     time: "4 hrs ago",
     color: "text-green-500",
   },
   {
-    icon: FaTools,
+    icon: Wrench,
     message: "Monitor sent for maintenance",
     time: "1 day ago",
     color: "text-yellow-500",
@@ -624,7 +626,7 @@ const Statistics = () => {
             </select>
 
             <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all">
-              <BsLightningCharge className="text-lg" />
+              <Zap className="text-lg" />
               <span>Refresh</span>
             </button>
           </div>
@@ -650,7 +652,7 @@ const Statistics = () => {
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/50">
-                    <PiGridFour className="text-2xl text-blue-600 dark:text-blue-400" />
+                    <Grid2X2Plus className="text-2xl text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
                     <h1 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
@@ -687,7 +689,7 @@ const Statistics = () => {
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-green-100 dark:bg-green-900/50">
-                    <BsPersonFill className="text-2xl text-green-600 dark:text-green-400" />
+                    <User className="text-2xl text-green-600 dark:text-green-400" />
                   </div>
                   <div>
                     <h1 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
@@ -724,7 +726,7 @@ const Statistics = () => {
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/50">
-                    <FaTools className="text-2xl text-amber-600 dark:text-amber-400" />
+                    <Wrench className="text-2xl text-amber-600 dark:text-amber-400" />
                   </div>
                   <div>
                     <h1 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
@@ -769,7 +771,7 @@ const Statistics = () => {
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/50">
-                    <RiAddFill className="text-2xl text-blue-600 dark:text-blue-400" />
+                    <Plus className="text-2xl text-blue-600 dark:text-blue-400" />
                   </div>
                   <h1 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
                     Quick Actions
@@ -783,7 +785,7 @@ const Statistics = () => {
                     className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition group"
                   >
                     <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition">
-                      <RiAddFill className="text-xl text-blue-600 dark:text-blue-400" />
+                      <Plus className="text-xl text-blue-600 dark:text-blue-400" />
                     </div>
                     <span
                       className="font-medium"
@@ -812,7 +814,7 @@ const Statistics = () => {
                     className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition group"
                   >
                     <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition">
-                      <BsPersonFill className="text-xl text-blue-600 dark:text-blue-400" />
+                      <User className="text-xl text-blue-600 dark:text-blue-400" />
                     </div>
                     <span
                       className="font-medium"
@@ -841,7 +843,7 @@ const Statistics = () => {
                     className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition group"
                   >
                     <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition">
-                      <HiDocumentReport className="text-xl text-blue-600 dark:text-blue-400" />
+                      <FileChartColumnIncreasing className="text-xl text-blue-600 dark:text-blue-400" />
                     </div>
                     <span className="font-medium">Generate Report</span>
                     <div className="ml-auto text-blue-400 opacity-0 group-hover:opacity-100 transition">
@@ -865,7 +867,7 @@ const Statistics = () => {
                     className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition group"
                   >
                     <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition">
-                      <FaTools className="text-xl text-blue-600 dark:text-blue-400" />
+                      <Wrench className="text-xl text-blue-600 dark:text-blue-400" />
                     </div>
                     <span className="font-medium">Request Maintenance</span>
                     <div className="ml-auto text-blue-400 opacity-0 group-hover:opacity-100 transition">
@@ -900,7 +902,7 @@ const Statistics = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/50">
-                      <BsPersonFill className="text-2xl text-blue-600 dark:text-blue-400" />
+                      <User className="text-2xl text-blue-600 dark:text-blue-400" />
                     </div>
                     <h1 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
                       Recent Activities
@@ -990,7 +992,7 @@ const Statistics = () => {
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/50">
-                    <PiGridFour className="text-2xl text-blue-600 dark:text-blue-400" />
+                    <Grid2X2Plus className="text-2xl text-blue-600 dark:text-blue-400" />
                   </div>
                   <h1 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
                     Asset Distribution

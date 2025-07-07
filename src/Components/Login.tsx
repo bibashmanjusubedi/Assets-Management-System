@@ -1,38 +1,37 @@
-import { FormEvent, useState } from "react";
-import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { FormEvent, ReactNode, useState } from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
-import { LoaderIcon } from "lucide-react";
+import { Eye, EyeClosed, LoaderIcon } from "lucide-react";
 import { toast } from "sonner";
+import { api } from "@/lib/api";
+import { PiEyeSlashBold } from "react-icons/pi";
+export const asReactElement = <T extends ReactNode>(
+  node: T
+): React.ReactElement => node as React.ReactElement;
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-setLoading(true);
+    setLoading(true);
     const data = new FormData(e.currentTarget);
     const formData = {
-      email: data.get("email"),
-      password: data.get("password"),
+      Name: data.get("name"),
+      Password: data.get("password"),
     };
 
     try {
-      const response = await axios.post(
-        "https://asset-management-system-2y9g.onrender.com/api/user/login/",
-        JSON.stringify(formData),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await api.post("/auth/login", JSON.stringify(formData), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (response?.data?.token) {
+      if (response?.data) {
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        toast("Login Successful")
+        toast("Login Successful");
 
         navigate("/");
       }
@@ -41,7 +40,7 @@ setLoading(true);
     } catch (error) {
       console.error(error);
       window.alert("Login Failed");
-    } finally{
+    } finally {
       setLoading(false);
     }
   }
@@ -68,10 +67,10 @@ setLoading(true);
             <h1 className="text-2xl font-semibold mb-6 text-center">Login</h1>
             <div className="space-y-6">
               <InputComp
-                label="Email"
-                type="email"
-                name="email"
-                placeholder="Enter email"
+                label="Name"
+                type="name"
+                name="name"
+                placeholder="Enter name"
               />
               <div className="relative">
                 <InputComp
@@ -84,7 +83,7 @@ setLoading(true);
                   className="absolute right-3 top-[38px] cursor-pointer text-gray-600"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                  {showPassword ? <Eye /> : <EyeClosed />}
                 </span>
               </div>
               <button
@@ -92,7 +91,7 @@ setLoading(true);
                 type="submit"
                 className="bg-teal-500 space-x-4 text-white py-2 rounded font-semibold w-full hover:bg-white hover:border-2 hover:border-teal-400 hover:text-blue-500 transition"
               >
-              {loading&& <LoaderIcon className="animate-spin" />} Submit
+                {loading && <LoaderIcon className="animate-spin" />} Submit
               </button>
             </div>
           </div>

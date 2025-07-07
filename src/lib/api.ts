@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://asset-management-system-2y9g.onrender.com/api",
+  baseURL: "http://localhost:5091/api",
 });
 
 api.interceptors.request.use((config) => {

@@ -5,6 +5,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { ModeToggle } from "../theme-switch";
 import { api } from "@/lib/api"; 
+import { ChevronDown, Search } from "lucide-react";
 
 type User = {
   name: string;
@@ -45,8 +46,8 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(
-        "https://asset-management-system-2y9g.onrender.com/api/user/logout/"
+      await api.post(
+        "/user/logout/"
       );
       localStorage.removeItem("user");
       localStorage.removeItem("token");
@@ -155,10 +156,10 @@ const Navbar = () => {
   };
 
   return (
-    <div className=" fixed top-0 w-full bg-gradient-to-r from-[#206D85] via-[#70C5AE] to-[#6DCC4E] py-2 shadow-md z-10">
+    <div className=" static top-0 w-full bg-gradient-to-r from-[#206D85] via-[#70C5AE] to-[#6DCC4E] py-2 shadow-md z-10">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center relative ">
         <div className="relative w-full max-w-md mr-15 ">
-          <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white text-xl pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white text-xl pointer-events-none" />
           <input
             type="text"
             placeholder="Search"
@@ -173,7 +174,7 @@ const Navbar = () => {
     onClick={() => setShowDropdown(!showDropdown)}
   >
     <span className="mr-25">Welcome, {user?.name || "User"}</span>
-    <FaChevronDown className="text-white text-sm" />
+    <ChevronDown className="text-white text-sm" />
   </div>
   {/* ...dropdown... */}
           {showDropdown && (
