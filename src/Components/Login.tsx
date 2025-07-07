@@ -1,122 +1,129 @@
-import axios from "axios";
 import { FormEvent, useState } from "react";
-import { FaEyeSlash } from "react-icons/fa";
-import { FaEye } from "react-icons/fa";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import Assets from "../Assets/Assets.png";
+import axios from "axios";
+import { LoaderIcon } from "lucide-react";
+import { toast } from "sonner";
+
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
+const [loading, setLoading] = useState(false);
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+setLoading(true);
     const data = new FormData(e.currentTarget);
     const formData = {
       email: data.get("email"),
       password: data.get("password"),
     };
-    console.log("form Data", formData);
+
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://2k8mf0hg-8001.inc1.devtunnels.ms/api/user/login/",
+        "https://asset-management-system-2y9g.onrender.com/api/user/login/",
         JSON.stringify(formData),
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(response.data);
-      // window.alert("Login Successfull");
-      // navigate("/");
+
       if (response?.data?.token) {
-        localStorage.setItem("token", response.data.token);
-        window.alert("Login Successfull");
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        toast("Login Successful")
+
         navigate("/");
       }
+
       (e.target as HTMLFormElement).reset();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       window.alert("Login Failed");
+    } finally{
+      setLoading(false);
     }
   }
+
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="flex justify-center mt-10 ">
-          <div className="w-110 h-130  shadow-2xl border-2 border-gray-100 rounded-xl">
-            <div className="border-b-3 border-t-3 border-radius-2xl border-t-blue-900 border-gray-200 pb-4 pt-1 mb-5 flex justify-center items-center">
-              <h1 className="font-semibold text-2xl">Login</h1>
-            </div>
-            <div className="flex justify-items-start">
-              <div className="space-y-6 ">
-                <InputComp
-                  label="Email"
-                  type="email"
-                  name="email"
-                  placeholder="enter email"
-                />
-
-                <div className="relative ">
-                  <InputComp
-                    label="Password"
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="enter password"
-                  />
-                  <span
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer "
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEye /> : <FaEyeSlash />}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center items-center">
-              <button
-                type="submit"
-                className="bg-blue-900 text-white w-49 mt-5 p-1 flex justify-center font-semibold "
-              >
-                Submit
-              </button>
-            </div>
-
-            <p className="mt-7 ml-7 flex justify-center items-center">
-              Don't Have an Account?
-              <button
-                type="button"
-                className=" text-blue-900 text-sm p-1 m-1"
-                onClick={() => navigate("/register")}
-              >
-                Register
-              </button>
-            </p>
+    <form onSubmit={handleSubmit}>
+      <div className="flex h-screen w-full items-center justify-center bg-gray-100">
+        <div className="flex w-[80%] max-w-5xl h-[70%] bg-white shadow-2xl rounded-2xl overflow-hidden">
+          {/* Left Panel */}
+          <div className="w-1/2 bg-teal-500 text-white flex flex-col justify-center items-center p-10 rounded-tr-lg rounded-br-full transition-all duration-700 ease-in-out ">
+            <h2 className="text-3xl font-bold mb-4">Hello, Welcome!</h2>
+            <p className="mb-6">Don't have an account?</p>
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="border border-white px-6 py-2 rounded-full font-semibold hover:bg-white hover:text-blue-500 transition"
+            >
+              Login
+            </button>
           </div>
-          <div className="h-130 w-130 flex justify-center items-center">
-            <img src={Assets} />
+
+          {/* Right Panel (Login Form) */}
+          <div className="w-1/2 p-10 flex flex-col justify-center">
+            <h1 className="text-2xl font-semibold mb-6 text-center">Login</h1>
+            <div className="space-y-6">
+              <InputComp
+                label="Email"
+                type="email"
+                name="email"
+                placeholder="Enter email"
+              />
+              <div className="relative">
+                <InputComp
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter password"
+                />
+                <span
+                  className="absolute right-3 top-[38px] cursor-pointer text-gray-600"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
+              <button
+                disabled={loading}
+                type="submit"
+                className="bg-teal-500 space-x-4 text-white py-2 rounded font-semibold w-full hover:bg-white hover:border-2 hover:border-teal-400 hover:text-blue-500 transition"
+              >
+              {loading&& <LoaderIcon className="animate-spin" />} Submit
+              </button>
+            </div>
           </div>
         </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 }
+
+type InputProps = {
+  label: string;
+  type?: string;
+  name: string;
+  placeholder?: string;
+};
+
 function InputComp({
-  label = "text",
+  label,
   type = "text",
-  placeholder = "text",
+  name,
+  placeholder = "",
   ...rest
-}) {
+}: InputProps) {
   return (
-    <div className="flex items-center space-x-4">
-      <label className="ml-5 w-20 font-medium">{label}</label>
+    <div className="flex flex-col w-full">
+      <label className="mb-1 font-medium text-sm">{label}</label>
       <input
         type={type}
+        name={name}
         placeholder={placeholder}
-        className="border-2 border-gray-500 pl-3 p-1"
+        className="border border-gray-400 rounded p-2 focus:outline-none focus:ring-1 focus:ring-teal-500"
         {...rest}
       />
     </div>

@@ -1,10 +1,11 @@
-import axios from "axios";
+import { api } from "@/lib/api";
+// import axios from "axios";
 import { FormEvent, useState } from "react";
-import { FaEyeSlash } from "react-icons/fa";
-import { FaEye } from "react-icons/fa";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router";
 
-export default function Register() {
+export default function NewUsers() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const navigate = useNavigate();
@@ -25,9 +26,9 @@ export default function Register() {
     };
     console.log("form data", formData);
     try {
-      const response = await axios.post(
-        "https://2k8mf0hg-8001.inc1.devtunnels.ms/api/user/register/",
-        formData,
+      const response = await api.post(
+        "/user/register/",
+        JSON.stringify(formData),
         {
           headers: {
             "Content-Type": "application/json",
@@ -36,112 +37,137 @@ export default function Register() {
       );
       console.log(response.data);
       window.alert("Registration Successfull");
-      navigate("/login");
+      // navigate("/login");
     } catch (error) {
       console.log(error);
-      window.alert("registration fail");
+      window.alert("Registration Failed");
     }
   }
+
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="flex justify-center items-center">
-          <div className="w-120 h-180 shadow-2xl border-2 border-gray-100 rounded-xl ">
-            <div className="border-b-3 border-t-3 border-radius-2xl border-t-blue-300 border-gray-200 pb-4 pt-1 mb-5 flex justify-center items-center">
-              <h1>Create an Account</h1>
-            </div>
-            <div className="flex justify-items-start">
-              <div className="space-y-6 ">
-                <InputComp
-                  label="UserName"
-                  type="text"
-                  name="username"
-                  placeholder="enter username"
-                />
-                <InputComp
-                  label="Email"
-                  type="email"
-                  name="email"
-                  placeholder="enter email"
-                />
-                <InputComp
-                  label="First Name"
-                  type="text"
-                  name="first_name"
-                  placeholder="Enter first name"
-                />
-                <InputComp
-                  label="Last Name"
-                  type="text"
-                  name="last_name"
-                  placeholder="Enter last name"
-                />
-                <InputComp
-                  label="Address"
-                  type="text"
-                  name="address"
-                  placeholder="Enter your Address"
-                />
-                <InputComp
-                  label="Phone Number"
-                  type="number"
-                  name="phone_number"
-                  placeholder="Enter phone number"
-                />
-                <div className="relative ">
-                  <InputComp
-                    label="Password"
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="enter password"
-                  />
-                  <span
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer "
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEye /> : <FaEyeSlash />}
-                  </span>
-                </div>
-                <div className="relative">
-                  <InputComp
-                    label="Retype Password"
-                    type={showPassword2 ? "text" : "password"}
-                    name="password2"
-                    placeholder="enter password"
-                  />
-                  <span
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer "
-                    onClick={() => setShowPassword2(!showPassword2)}
-                  >
-                    {showPassword2 ? <FaEye /> : <FaEyeSlash />}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center items-center">
-              <button
-                type="submit"
-                className="bg-blue-300 w-49 mt-5 p-1 flex justify-center font-semibold "
+    <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
+      <div className="w-6/5 max-w-6xl flex shadow-2xl rounded-xl bg-card/50  text-card-foreground overflow-hidden items-center justify-center ">
+        <div className="flex items-start">
+          <button
+            onClick={() => navigate("/")}
+            className="mr-4 p-2 rounded-full bg-white shadow"
+          >
+            <IoArrowBack className="text-2xl text-black-500 font-light " />
+          </button>
+        </div>
+        {/* Right Form Section */}
+        <div className="w-2/3 bg-card text-card-foreground p-10 flex flex-col justify-center ">
+          <h1 className="text-3xl font-bold text-center mb-6 underline">
+            Create NewUsers
+          </h1>
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <InputComp
+              label="UserName"
+              type="text"
+              name="username"
+              placeholder="Enter username"
+            />
+            <InputComp
+              label="Email"
+              type="email"
+              name="email"
+              placeholder="Enter email"
+            />
+            <InputComp
+              label="First Name"
+              type="text"
+              name="first_name"
+              placeholder="Enter first name"
+            />
+            <InputComp
+              label="Last Name"
+              type="text"
+              name="last_name"
+              placeholder="Enter last name"
+            />
+            <InputComp
+              label="Address"
+              type="text"
+              name="address"
+              placeholder="Enter address"
+            />
+            <InputComp
+              label="Phone Number"
+              type="number"
+              name="phone_number"
+              placeholder="Enter phone number"
+            />
+
+            <div className="relative">
+              <InputComp
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter password"
+              />
+              <span
+                className="absolute right-4 top-2/3 -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
               >
-                Submit
-              </button>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
             </div>
-            <p className="mt-7 ml-7 flex justify-center items-center">
-              Already Have an Account?
+
+            <div className="relative">
+              <InputComp
+                label="Retype Password"
+                type={showPassword2 ? "text" : "password"}
+                name="password2"
+                placeholder="Retype password"
+              />
+              <span
+                className="absolute right-4 top-2/3 -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowPassword2(!showPassword2)}
+              >
+                {showPassword2 ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              className=" font-semibold  bg-teal-500 text-white py-2 rounded  w-full hover:bg-white hover:border-2 hover:border-teal-500 hover:text-blue-500 transition"
+            >
+              Register
+            </button>
+
+            <p className="text-center text-sm mt-4">
+              Already have an account?{" "}
               <button
                 type="button"
-                className=" text-blue-700 text-sm p-1 m-1"
+                className="text-teal-500 hover:underline"
                 onClick={() => navigate("/login")}
               >
-                login
+                Login
               </button>
             </p>
-          </div>
+          </form>
         </div>
-      </form>
-    </>
+
+        {/* Left Purple Gradient Panel */}
+        {/* <div className="w-1/2 bg-teal-500 text-white flex flex-col justify-center items-center p-10 rounded-l-[80%] rounded-tl-full  transition-all duration-700 ease-in-out">
+          <h2 className="text-4xl font-bold mb-6">Welcome!</h2>
+          <p className="text-lg text-center leading-6">
+            Join us and enjoy seamless experience. Let's get you registered!
+          </p>
+          <p className="mb-6 mt-20">Already have an account?</p>
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="border border-white px-6 py-2 rounded-full font-semibold hover:bg-white hover:text-blue-500 transition"
+          >
+            Login
+          </button>
+        </div> */}
+      </div>
+    </div>
   );
 }
+
 function InputComp({
   label = "text",
   type = "text",
@@ -149,12 +175,12 @@ function InputComp({
   ...rest
 }) {
   return (
-    <div className="flex items-center space-x-4">
-      <label className="ml-5 w-20 font-medium">{label}</label>
+    <div className="flex flex-col">
+      <label className="font-medium mb-1">{label}</label>
       <input
         type={type}
         placeholder={placeholder}
-        className="border-2 border-gray-500 pl-3 p-1"
+        className="border border-gray-400 rounded-md p-2 text-foreground focus:outline-none focus:ring-1 focus:ring-teal-500"
         {...rest}
       />
     </div>
