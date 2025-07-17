@@ -46,10 +46,15 @@ interface Pagination {
 interface TypeCatgRes extends TypeTableRes {
   results: Category[];
 }
+// interface Category {
+//   id: number;
+//   name: string;
+// }
 interface Category {
-  id: number;
-  name: string;
+  catID: number;    // Changed from 'id'
+  catName: string;  // Changed from 'name'
 }
+
 
 const ASSETS_URL = "/Asset/";
 
@@ -194,8 +199,8 @@ export default function Assets() {
 
   const fetchCategories = async () => {
     try {
-      const { data }: { data: TypeCatgRes } = await api.get("/categories/");
-      setCategoryData(data.results);
+      const { data }: { data: TypeCatgRes } = await api.get("/AssetCategory/");
+      setCategoryData(data.results || data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -254,6 +259,7 @@ export default function Assets() {
   const handleSubmit = async () => {
     try {
       const payload = {
+        AssetId: formData.AssetId,
         Name: formData.Name,
         Shortname: formData.Shortname,
         Description: formData.Description,
@@ -266,7 +272,7 @@ export default function Assets() {
         await api.put(`/assets/${formData.AssetId}/`, payload);
       } else {
         // Create
-        await api.post("/assets/", payload);
+        await api.post("/Asset/Create/", payload);
       }
 
       await fetchAssets();
@@ -327,7 +333,7 @@ export default function Assets() {
 
   const fetchCategory = async () => {
     try {
-      const { data }: { data: TypeCatgRes } = await api.get("/categories/");
+      const { data }: { data: TypeCatgRes } = await api.get("/AssetCategory/");
       setCategoryData(data.results);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -416,6 +422,19 @@ export default function Assets() {
                   placeholder="Description"
                   className="w-full border border-teal-500 p-2 rounded-lg"
                   value={formData.Description}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Unit
+                </label>
+                <input
+                  type="number"
+                  name="Unit"
+                  placeholder="Unit"
+                  className="w-full border border-teal-500 p-2 rounded-lg"
+                  value={formData.Unit}
                   onChange={handleChange}
                 />
               </div>
@@ -526,7 +545,8 @@ export default function Assets() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {/* {CategoryData.find((cat) => cat.id === asset.catID)?.name ||
                       "N/A"} */}
-                    {asset.catID}
+                    {asset.catID} is {/* New code showing category name */}
+                    {CategoryData.find(cat => cat.catID=== asset.catID)?.catName || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <Action
