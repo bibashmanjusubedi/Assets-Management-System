@@ -5,14 +5,22 @@ import { useLocation, useNavigate } from "react-router";
 import { IoArrowBack } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { api } from "@/lib/api";
+// interface Asset {
+//   AssetId: number;
+//   Name: string;
+//   Shortname: string;
+//   AssetCategory: number;
+//   AssetCategoryName: string;
+//   Unit: number;
+//   Description: string;
+// }
 interface Asset {
-  AssetId: number;
-  Name: string;
-  Shortname: string;
-  AssetCategory: number;
-  AssetCategoryName: string;
-  Unit: number;
-  Description: string;
+  assetId: number; // match the casing
+  name: string;
+  shortName: string;
+  description: string;
+  unit: string; // or number if the API sends it as number
+  catID: number; // match the response
 }
 interface TypeTableRes {
   pagination: Pagination;
@@ -20,8 +28,12 @@ interface TypeTableRes {
   message: string;
   results: unknown[];
 }
-interface AssetResponse extends TypeTableRes {
+// interface AssetResponse extends TypeTableRes {
+//   results: Asset[];
+// }
+interface AssetResponse {
   results: Asset[];
+  pagination?: any; // Make optional if not always provided
 }
 
 interface Pagination {
@@ -39,7 +51,7 @@ interface Category {
   name: string;
 }
 
-const ASSETS_URL = "/assets/";
+const ASSETS_URL = "/Asset/";
 
 const Action = ({
   assetId,
@@ -146,14 +158,31 @@ export default function Assets() {
   const [editingRowId, setEditingRowId] = useState<number | null>(null);
   const [rowEditData, setRowEditData] = useState<Partial<Asset>>({});
 
+  // const fetchAssets = useCallback(async () => {
+  //   try {
+  //     const { data }: { data: AssetResponse } = await api.get(
+  //       ASSETS_URL //+ `?page=${page}`
+  //     );
+
+  //     setAssetData(data.results);
+  //     setPagination(data.pagination);
+  //   } catch (error) {
+  //     console.error("Error fetching assets:", error);
+  //   }
+  // }, [page]);
+
   const fetchAssets = useCallback(async () => {
     try {
-      const { data }: { data: AssetResponse } = await api.get(
-        ASSETS_URL + `?page=${page}`
-      );
+      const { data } = await api.get<Asset[] | AssetResponse>(ASSETS_URL);
 
-      setAssetData(data.results);
-      setPagination(data.pagination);
+      // Check if response is array or paginated object
+      if (Array.isArray(data)) {
+        setAssetData(data);
+        // setPagination(null); // Handle missing pagination
+      } else {
+        setAssetData(data.results);
+        setPagination(data.pagination);
+      }
     } catch (error) {
       console.error("Error fetching assets:", error);
     }
@@ -444,6 +473,9 @@ export default function Assets() {
                   SN
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase">
+                  Asset Id
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase">
                   Asset Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase">
@@ -463,23 +495,86 @@ export default function Assets() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200 ">
+            {/* <tbody className="bg-white divide-y divide-gray-200">
+              <tr className="hover:bg-gray-50 transition-colors">assetID from backend</tr>
+
+            </tbody> */}
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filterData.map((asset, index) => (
+                <tr
+                  key={asset.assetId}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {index + 1}
+                  </td>
+                  <th className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {asset.assetId}
+                  </th>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {asset.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {asset.shortName}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {asset.description}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {asset.unit}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {/* {CategoryData.find((cat) => cat.id === asset.catID)?.name ||
+                      "N/A"} */}
+                    {asset.catID}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <Action
+                      assetId={asset.assetId}
+                      fetchAssets={fetchAssets}
+                      onEditClick={(id) => {
+                        const assetToEdit = assetData.find(
+                          (a) => a.assetId === id
+                        );
+                        if (assetToEdit) {
+                          setFormData({
+                            AssetId: assetToEdit.assetId,
+                            Name: assetToEdit.name,
+                            Shortname: assetToEdit.shortName,
+                            AssetCategory: assetToEdit.catID,
+                            AssetCategoryName:
+                              CategoryData.find(
+                                (cat) => cat.id === assetToEdit.catID
+                              )?.name || "",
+                            Unit: Number(assetToEdit.unit),
+                            Description: assetToEdit.description,
+                          });
+                          setShowForm(true);
+                        }
+                      }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+            {/* <tbody className="bg-white divide-y divide-gray-200 ">
               {filterData.length > 0 ? (
                 filterData.map((asset, index) => (
                   // filterData.map((asset, index) => (
                   <tr
-                    key={asset.AssetId}
+                    key={asset.assetId}
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {(pagination.current_page - 1) * pageSize + index + 1}
                     </td>
-                    {editingRowId === asset.AssetId ? (
+                    {editingRowId === asset.assetId ? (
                       <>
                         <td className="px-6 py-4 text-sm">
                           <input
                             type="text"
-                            value={rowEditData.Name ?? asset.Name}
+                            value={rowEditData.Name ?? asset.name}
                             onChange={(e) =>
                               setRowEditData((d) => ({
                                 ...d,
@@ -492,7 +587,7 @@ export default function Assets() {
                         <td className="px-6 py-4 text-sm">
                           <input
                             type="text"
-                            value={rowEditData.Shortname ?? asset.Shortname}
+                            value={rowEditData.Shortname ?? asset.shortname}
                             onChange={(e) =>
                               setRowEditData((d) => ({
                                 ...d,
@@ -505,7 +600,7 @@ export default function Assets() {
                         <td className="px-6 py-4 text-sm ">
                           <input
                             type="text"
-                            value={rowEditData.Description ?? asset.Description}
+                            value={rowEditData.Description ?? asset.description}
                             onChange={(e) =>
                               setRowEditData((d) => ({
                                 ...d,
@@ -519,7 +614,7 @@ export default function Assets() {
                         <td className="px-6 py-4 text-sm">
                           <input
                             type="number"
-                            value={rowEditData.Unit ?? asset.Unit}
+                            value={rowEditData.Unit ?? asset.unit}
                             onChange={(e) =>
                               setRowEditData((d) => ({
                                 ...d,
@@ -618,7 +713,7 @@ export default function Assets() {
                   </td>
                 </tr>
               )}
-            </tbody>
+            </tbody> */}
           </table>
         </div>
 
