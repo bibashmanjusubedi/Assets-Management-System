@@ -199,7 +199,7 @@ export default function Assets() {
 
   const fetchCategories = async () => {
     try {
-      const { data }: { data: TypeCatgRes } = await api.get("/AssetCategory/");
+      const { data }: { data: TypeCatgRes } = await api.get("/AssetCategory");
       setCategoryData(data.results || data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -456,10 +456,12 @@ export default function Assets() {
                   <option value="">Select a Category</option>
                   {Array.isArray(CategoryData) &&
                     CategoryData.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
+                      <option key={category.catID} value={category.catID}>
+                        {category.catName}
                       </option>
+                      
                     ))}
+                    <option>Nothing</option>
                 </select>
               </div>
               <div className="flex items-end space-x-2">
@@ -546,7 +548,8 @@ export default function Assets() {
                     {/* {CategoryData.find((cat) => cat.id === asset.catID)?.name ||
                       "N/A"} */}
                     {asset.catID} is {/* New code showing category name */}
-                    {CategoryData.find(cat => cat.catID=== asset.catID)?.catName || 'N/A'}
+                    {/* {CategoryData.find(cat => cat.catID=== asset.catID)?.catName || 'N/A'} */}
+                    {(CategoryData || []).find(cat => cat.catID === asset.catID)?.catName || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <Action
