@@ -151,13 +151,12 @@ export default function Assets() {
   });
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Asset>({
-    AssetId: 0,
-    Name: "",
-    Shortname: "",
-    AssetCategory: 0,
-    AssetCategoryName: "",
-    Unit: 0,
-    Description: "",
+    assetId: 0,
+    name: "",
+    shortName: "",
+    description: "",
+    unit: "",
+    catID:0
   });
 
   const [editingRowId, setEditingRowId] = useState<number | null>(null);
@@ -217,7 +216,7 @@ export default function Assets() {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "Unit" || name === "AssetId" || name === "AssetCategory"
+        name === "unit" || name === "assetId" || name === "catID"
           ? Number(value)
           : value,
     }));
@@ -260,26 +259,32 @@ export default function Assets() {
   const handleSubmit = async () => {
     try {
       const payload = {
-        AssetId: formData.AssetId,
-        Name: formData.Name,
-        Shortname: formData.Shortname,
-        Description: formData.Description,
-        Unit: String(formData.Unit),
-        AssetCategory: formData.AssetCategory,
+          name: formData.name,
+          shortName: formData.shortName,
+          description: formData.description,
+          unit: String(formData.unit),
+          catID: formData.catID,
       };
+
+      console.log("Submitting to API:", payload);
 
       if (formData.AssetId) {
         // Update
         await api.put(`/assets/${formData.AssetId}/`, payload);
       } else {
         // Create
-        await api.post("/Asset/Create/", payload);
+        await api.post("/Asset/Create", payload);
       }
 
       await fetchAssets();
       resetForm();
     } catch (error) {
+
+
       console.error("Error saving asset:", error);
+      if (error.response) {
+        console.error("Server response data:", error.response.data.errors);
+      }
     }
   };
   const resetForm = () => {
@@ -393,10 +398,10 @@ export default function Assets() {
                 <label className="block text-sm font-medium mb-1">Name</label>
                 <input
                   type="text"
-                  name="Name"
+                  name="name"
                   placeholder="Name"
                   className="w-full border border-teal-500 p-2 rounded-lg"
-                  value={formData.Name}
+                  value={formData.name}
                   onChange={handleChange}
                 />
               </div>
@@ -406,10 +411,10 @@ export default function Assets() {
                 </label>
                 <input
                   type="text"
-                  name="Shortname"
+                  name="shortName"
                   placeholder="Short Name"
                   className="w-full border border-teal-500 p-2 rounded-lg"
-                  value={formData.Shortname}
+                  value={formData.shortName}
                   onChange={handleChange}
                 />
               </div>
@@ -419,10 +424,10 @@ export default function Assets() {
                 </label>
                 <input
                   type="text"
-                  name="Description"
+                  name="description"
                   placeholder="Description"
                   className="w-full border border-teal-500 p-2 rounded-lg"
-                  value={formData.Description}
+                  value={formData.description}
                   onChange={handleChange}
                 />
               </div>
@@ -432,10 +437,10 @@ export default function Assets() {
                 </label>
                 <input
                   type="number"
-                  name="Unit"
+                  name="unit"
                   placeholder="Unit"
                   className="w-full border border-teal-500 p-2 rounded-lg"
-                  value={formData.Unit}
+                  value={formData.unit}
                   onChange={handleChange}
                 />
               </div>
@@ -444,12 +449,12 @@ export default function Assets() {
                   Asset Category
                 </label>
                 <select
-                  name="AssetCategory"
-                  value={formData.AssetCategory}
+                  name="catID"
+                  value={formData.catID ?? ""}
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                     setFormData((prev) => ({
                       ...prev,
-                      AssetCategory: Number(e.target.value),
+                      catID: e.target.value ? Number(e.target.value): undefined,
                     }))
                   }
                   className="w-full border border-teal-500 p-2 rounded-lg"
