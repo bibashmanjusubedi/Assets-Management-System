@@ -458,7 +458,7 @@ export default function Assets() {
                   { CategoryData?.length > 0 && 
                     CategoryData?.map((category) => (
                       <option key={category.catID} value={category.catID}>
-                        {category.catName}
+                        {category.catID} is {category.catName}
                       </option>
                       
                     ))}
