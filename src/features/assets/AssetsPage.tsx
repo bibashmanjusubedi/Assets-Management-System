@@ -374,6 +374,7 @@ export default function Assets() {
             onClick={() => {
               resetForm();
               setShowForm(!showForm);
+
             }}
             className="text-white bg-teal-500 px-4 py-2 rounded-lg text-sm hover:bg-teal-600"
           >
