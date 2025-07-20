@@ -255,6 +255,7 @@ export default function Assets() {
   //     console.error("Error saving asset:", error);
   //   }
   // };
+  console.log(CategoryData);
 
   const handleSubmit = async () => {
     try {
@@ -331,14 +332,14 @@ export default function Assets() {
   //   }
   // };
 
-  const fetchCategory = async () => {
-    try {
-      const { data }: { data: TypeCatgRes } = await api.get("/AssetCategory/");
-      setCategoryData(data.results);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+  // const fetchCategory = async () => {
+  //   try {
+  //     const { data }: { data: TypeCatgRes } = await api.get("/AssetCategory/");
+  //     setCategoryData(data.results);
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   }
+  // };
 
   // }, []);
   // Determine if the form is in editing mode
@@ -373,7 +374,6 @@ export default function Assets() {
             onClick={() => {
               resetForm();
               setShowForm(!showForm);
-              fetchCategory();
             }}
             className="text-white bg-teal-500 px-4 py-2 rounded-lg text-sm hover:bg-teal-600"
           >
@@ -454,8 +454,8 @@ export default function Assets() {
                   className="w-full border border-teal-500 p-2 rounded-lg"
                 >
                   <option value="">Select a Category</option>
-                  {Array.isArray(CategoryData) &&
-                    CategoryData.map((category) => (
+                  { CategoryData?.length > 0 && 
+                    CategoryData?.map((category) => (
                       <option key={category.catID} value={category.catID}>
                         {category.catName}
                       </option>
