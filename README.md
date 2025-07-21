@@ -52,3 +52,4 @@ export default tseslint.config({
   },
 });
 ```
+## run the project with: pnpm dev
