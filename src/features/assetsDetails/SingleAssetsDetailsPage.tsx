@@ -39,11 +39,11 @@ import { api } from "@/lib/api";
 
 type AssetDetailsResponse = {
   
-  AssetId: number;
-  Name: string;
-  Shortname?: string;
-  Description?: string;
-  Unit?: number;
+  assetId: number;
+  name: string;
+  shortName?: string;
+  description?: string;
+  unit?: number;
   
 };
 
@@ -59,8 +59,9 @@ const SingleAssetsDetailsPage = () => {
       setError("");
       try {
         const { data }: { data: AssetDetailsResponse } = await api.get(
-          `/asset-details/${assetId}/`
+          `/Asset/Details/${assetId}/`
         );
+        console.log("Fetched Asset Data:", data);
         setAsset(data);
       } catch {
         setError("Error fetching asset details.");
@@ -80,7 +81,24 @@ const SingleAssetsDetailsPage = () => {
     <div>
       <h2 className="text-xl  mb-2">Asset Details</h2>
       {asset ? (
-        <pre className="bg-gray-100 p-4 rounded  "></pre>
+        // <pre className="bg-gray-100 p-4 rounded  ">{asset.assetId}</pre>
+        <div className="bg-gray-100 p-6 rounded shadow max-w-md">
+          <div className="mb-2">
+            <strong>Asset ID:</strong> {asset.assetId}
+          </div>
+          <div className="mb-2">
+            <strong>Name:</strong> {asset.name}
+          </div>
+          <div className="mb-2">
+            <strong>Shortname:</strong> {asset.shortName ?? "N/A"}
+          </div>
+          <div className="mb-2">
+            <strong>Description:</strong> {asset.description ?? "N/A"}
+          </div>
+          <div className="mb-2">
+            <strong>Unit:</strong> {asset.unit ?? "N/A"}
+          </div>
+        </div>
       ) : (
         <div>No asset found.</div>
       )}
