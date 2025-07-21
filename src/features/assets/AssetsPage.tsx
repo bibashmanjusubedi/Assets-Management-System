@@ -259,6 +259,7 @@ export default function Assets() {
   const handleSubmit = async () => {
     try {
       const payload = {
+          assetId : formData.assetId,
           name: formData.name,
           shortName: formData.shortName,
           description: formData.description,
@@ -271,6 +272,7 @@ export default function Assets() {
       console.log("formData.assetId", formData.assetId);
 
       if (formData.assetId) {
+        console.log("updated successfully", formData.assetId);
         // Update
         await api.put(`/Asset/Edit/${formData.assetId}`, payload);
       } else {
