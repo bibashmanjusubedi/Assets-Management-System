@@ -268,9 +268,11 @@ export default function Assets() {
 
       console.log("Submitting to API:", payload);
 
-      if (formData.AssetId) {
+      console.log("formData.assetId", formData.assetId);
+
+      if (formData.assetId) {
         // Update
-        await api.put(`/assets/${formData.AssetId}/`, payload);
+        await api.put(`/Asset/Edit/${formData.assetId}`, payload);
       } else {
         // Create
         await api.post("/Asset/Create", payload);
@@ -394,6 +396,18 @@ export default function Assets() {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {isEditing ? 
+            <div>
+                <label className="block text-sm font-medium mb-1">AssetId</label>
+                <input
+                  type="number"
+                  name="assetId"
+                  placeholder="assetId"
+                  className="w-full border border-teal-500 p-2 rounded-lg"
+                  value={formData.assetId}
+                  onChange={handleChange}
+                />
+              </div> : <div>Nothing in AssetID </div>}
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
                 <input
