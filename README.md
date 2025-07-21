@@ -52,4 +52,5 @@ export default tseslint.config({
   },
 });
 ```
+## install packages with: npm i
 ## run the project with: pnpm dev
