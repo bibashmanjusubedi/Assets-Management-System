@@ -28,8 +28,10 @@ export default function Login() {
         },
       });
 
+      console.log("Login response data:", response.data); 
+
       if (response?.data) {
-        localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         toast("Login Successful");
 

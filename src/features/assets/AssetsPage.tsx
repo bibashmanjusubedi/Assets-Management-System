@@ -85,15 +85,37 @@ const Action = ({
     if (!confirmDelete) return;
 
     try {
+      const token = localStorage.getItem("token");
+
+      console.log("token is :",token);
+
       await axios.delete(
-        `http://asset-management-system-2y9g.onrender.com/api/assets/${assetId}/`
+        `http://localhost:5091/api/Asset/Delete/${assetId}`,
+        
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+
       );
       window.alert("Asset deleted successfully");
       fetchAssets();
-    } catch (error) {
-      console.error("Error deleting asset:", error);
+    }
+    catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error deleting asset:", error.message);
+        console.error("Status:", error.response?.status);
+        console.error("Response data:", error.response?.data);
+      } else {
+        console.error("Unexpected error:", error);
+      }
       window.alert("Failed to delete asset");
     }
+    // } catch (error) {
+    //   console.error("Error deleting asset:", error);
+    //   window.alert("Failed to delete asset");
+    // }
   };
 
   return (
