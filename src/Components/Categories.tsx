@@ -6,26 +6,26 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { api } from "@/lib/api";
 
 interface Category {
-  id: number;
-  name: string;
+  catID: number;
+  catName: string;
 }
 
-interface CategoryResponse {
-  pagination: Pagination;
-  status: string;
-  message: string;
-  results: Category[];
-}
+// interface CategoryResponse {
+//   pagination: Pagination;
+//   status: string;
+//   message: string;
+//   results: Category[];
+// }
 
-interface Pagination {
-  current_page: number;
-  has_next?: boolean;
-  has_previous?: boolean;
-  total_items?: number;
-  total_pages?: number;
-}
+// interface Pagination {
+//   current_page: number;
+//   has_next?: boolean;
+//   has_previous?: boolean;
+//   total_items?: number;
+//   total_pages?: number;
+// }
 
-const CATEGORY_URL = "/categories/";
+const CATEGORY_URL = "/AssetCategory";
 
 export default function Categories() {
   const [categoryData, setCategoryData] = useState<Category[]>([]);
@@ -51,15 +51,15 @@ export default function Categories() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const { data }: { data: CategoryResponse } = await api.get(
-        CATEGORY_URL + `?page=${page}`
+      const { data }: { data: Category[] } = await api.get(
+        CATEGORY_URL
       );
-      setCategoryData(data.results);
-      setPagination(data.pagination);
+      setCategoryData(data);
+      // setPagination(data.pagination);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     fetchCategories();
@@ -84,13 +84,13 @@ export default function Categories() {
   };
 
   const filteredCategory = categoryData.filter((category) =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+    category.catName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Edit handlers
   const startEdit = (category: Category) => {
-    setEditingCategoryId(category.id);
-    setEditName(category.name);
+    setEditingCategoryId(category.catID);
+    setEditName(category.catName);
     setOpenMenu(null);
   };
 
@@ -245,10 +245,10 @@ export default function Categories() {
             </thead>
             <tbody>
               {Array.isArray(categoryData) && filteredCategory.map((category) => (
-                <tr key={category.id} className="border-b hover:bg-blue-50 ">
-                  <td className="px-6 py-4">{category.id}</td>
+                <tr key={category.catID} className="border-b hover:bg-blue-50 ">
+                  <td className="px-6 py-4">{category.catID}</td>
                   <td className="px-6 py-4 text-teal-600 font-semibold">
-                    {editingCategoryId === category.id ? (
+                    {editingCategoryId === category.catID ? (
                       <input
                         type="text"
                         value={editName}
@@ -257,7 +257,7 @@ export default function Categories() {
                         autoFocus
                       />
                     ) : (
-                      category.name
+                      category.catName
                     )}
                   </td>
                   <td className="px-6 py-4 text-sm relative">
@@ -266,20 +266,20 @@ export default function Categories() {
                         onClick={(e) => {
                           e.stopPropagation();
                           setOpenMenu(
-                            openMenu === category.id ? null : category.id
+                            openMenu === category.catID ? null : category.catID
                           );
                         }}
                         className="text-black focus:outline-none"
                       >
                         <BsThreeDotsVertical className="" />
                       </button>
-                      {openMenu === category.id && (
+                      {openMenu === category.catID && (
                         <div className="absolute left-0 mt-1 w-24 rounded shadow z-10 bg-white border text-xs ">
                           {editingCategoryId === category.id ? (
                             <>
                               <button
                                 className="block w-full text-left px-2 py-1 hover:bg-gray-100 text-green-600"
-                                onClick={() => saveEdit(category.id)}
+                                onClick={() => saveEdit(category.catID)}
                               >
                                 Save
                               </button>
@@ -309,7 +309,7 @@ export default function Categories() {
                               </button>
                               <button
                                 className="block w-full text-left px-2 py-1 hover:bg-gray-100 text-red-500"
-                                onClick={() => deleteCategory(category.id)}
+                                onClick={() => deleteCategory(category.catID)}
                               >
                                 Delete
                               </button>
