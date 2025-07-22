@@ -131,7 +131,9 @@ export default function Categories() {
       return;
     }
     try {
-      await api.post("/categories/", { name: newCategoryName.trim() });
+      await api.post("/AssetCategory/Create", { 
+        catID:0,
+        catName: newCategoryName.trim() });
       setShowAddForm(false);
       setNewCategoryName("");
       fetchCategories();
