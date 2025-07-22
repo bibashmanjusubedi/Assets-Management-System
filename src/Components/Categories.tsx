@@ -158,6 +158,18 @@ export default function Categories() {
 }
   };
 
+  const viewCategoryDetails = async (catID: number) => {
+    try {
+      const { data } = await api.get(`/AssetCategory/Details/${catID}`);
+      console.log("Category details:", data);
+      alert(`catID: ${data.catID}\ncatName: ${data.catName}`);
+    } catch (error) {
+      console.error("Error fetching category details:", error);
+      alert("Failed to fetch category details.");
+    }
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50 p-6 ">
       <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
@@ -297,6 +309,7 @@ export default function Categories() {
                               <button
                                 className="block w-full text-left px-2 py-1 hover:bg-gray-100"
                                 onClick={() => {
+                                  viewCategoryDetails(category.catID);
                                   // Placeholder for view logic
                                   setOpenMenu(null);
                                 }}
