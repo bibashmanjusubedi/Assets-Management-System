@@ -252,8 +252,8 @@ export default function Categories() {
           <table className="w-full text-sm text-left ">
             <thead className="text-white bg-teal-500 text-sm uppercase">
               <tr>
-                <th className="px-6 py-4">ID</th>
-                <th className="px-6 py-4">Name</th>
+                <th className="px-6 py-4">catID</th>
+                <th className="px-6 py-4">catName</th>
                 <th className="px-6 py-4">Action</th>
               </tr>
             </thead>
@@ -289,7 +289,7 @@ export default function Categories() {
                       </button>
                       {openMenu === category.catID && (
                         <div className="absolute left-0 mt-1 w-24 rounded shadow z-10 bg-white border text-xs ">
-                          {editingCategoryId === category.id ? (
+                          {editingCategoryId === category.catID ? (
                             <>
                               <button
                                 className="block w-full text-left px-2 py-1 hover:bg-gray-100 text-green-600"
