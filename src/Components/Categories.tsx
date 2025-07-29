@@ -101,7 +101,7 @@ export default function Categories() {
 
   const saveEdit = async (categoryId: number) => {
     try {
-      await api.put(`/categories/${categoryId}/`, { name: editName });
+      await api.put(`/AssetCategory/Edit/${categoryId}`, { catID: categoryId ,catName: editName });
       setEditingCategoryId(null);
       setEditName("");
       fetchCategories();
