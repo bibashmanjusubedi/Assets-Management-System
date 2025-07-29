@@ -115,7 +115,7 @@ export default function Categories() {
     setOpenMenu(null);
     if (!window.confirm("Are you sure you want to delete this category?")) return;
     try {
-      await api.delete(`/categories/${categoryId}/`);
+      await api.delete(`/AssetCategory/Delete/${categoryId}`);
       fetchCategories();
     } catch (error) {
       console.error("Error deleting category:", error);
