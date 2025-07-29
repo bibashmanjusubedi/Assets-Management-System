@@ -13,8 +13,22 @@ import NewUsers from "./Components/Register";
 import LogoutPage from "./Components/Logout";
 import SingleAssetsDetailsPage from "./features/assetsDetails/SingleAssetsDetailsPage";
 import MaintenanceTable from "./Components/Maintenence";
+import DetailAssetsDetailsPage from "./features/assetsDetails/DetailAssetsDetailsPage";
 
 export const router = createBrowserRouter([
+  {
+    path: "/detail-assets-details",
+    children:[
+      {
+        index: true,
+        element: <AssetDetailsPage />,
+      }
+      ,{
+        path: ":sn",
+        element: <DetailAssetsDetailsPage/>
+      }
+    ]
+  },
   {
     path: "/login",
     element: <Login />,
@@ -58,7 +72,7 @@ export const router = createBrowserRouter([
         path: "/assets-details",
         children:[
           {
-index: true,
+            index: true,
             element: <AssetDetailsPage />,
           }
           ,{

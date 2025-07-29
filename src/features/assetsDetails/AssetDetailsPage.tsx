@@ -131,8 +131,8 @@ const AssetDetailsPage: React.FC = () => {
     navigate(`/assets-details?page=${prevPage}${filterName ? `&name=${encodeURIComponent(filterName)}` : ""}`);
   };
 
-  const handleViewDetails = (assetId: number) => {
-    navigate(`/assets-details/${assetId}`);
+  const handleViewDetails = (sn: number) => {
+    navigate(`/detail-assets-details/${sn}`);
   };
 
   const startEditing = (asset: AssetDetails) => {
