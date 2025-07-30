@@ -39,6 +39,7 @@ interface AssetDetail {
   purchaseDate: string;
   remark: string;
   status: string;
+  name:string;
 }
 
 
@@ -94,7 +95,7 @@ const AssetDetailsPage: React.FC = () => {
         data.map((asset) => ({
           Sn: asset.sn,
           Asset: asset.assetId,
-          AssetName: `Asset No ${asset.assetId}`, // or fetch this if available
+          AssetName: asset.name, // or fetch this if available
           AssetCode: asset.assetCode.toString(),
           Price: asset.price,
           PurchaseDate: asset.purchaseDate,
