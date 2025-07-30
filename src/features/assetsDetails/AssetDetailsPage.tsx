@@ -39,9 +39,8 @@ interface AssetDetail {
   purchaseDate: string;
   remark: string;
   status: string;
-  name:string;
+  name: string;
 }
-
 
 const AssetDetailsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -68,7 +67,7 @@ const AssetDetailsPage: React.FC = () => {
   //     const { data }: { data: AssetDetailsResponse } = await api.get(
   //       `/asset-details/?page=${currentPage}`
   //     );
-      
+
   //     const filtered = filterName
   //       ? data.results.filter(asset =>
   //           asset.AssetName.toLowerCase().includes(filterName.toLowerCase())
@@ -84,13 +83,13 @@ const AssetDetailsPage: React.FC = () => {
   const fetchAssets = useCallback(async () => {
     try {
       const { data }: { data: AssetDetail[] } = await api.get(`/AssetDetail`);
-      
+
       const filtered = filterName
-        ? data.filter(asset =>
+        ? data.filter((asset) =>
             asset.remark.toLowerCase().includes(filterName.toLowerCase())
           )
         : data;
-  
+
       setAssetData(
         data.map((asset) => ({
           Sn: asset.sn,
@@ -113,7 +112,6 @@ const AssetDetailsPage: React.FC = () => {
       console.error("Error fetching asset details:", error);
     }
   }, [filterName]);
-  
 
   useEffect(() => {
     fetchAssets();
@@ -123,13 +121,21 @@ const AssetDetailsPage: React.FC = () => {
     // if (!pagination.has_next) return;
     if (!pagination || !pagination.has_next) return;
     const nextPage = pagination.current_page + 1;
-    navigate(`/assets-details?page=${nextPage}${filterName ? `&name=${encodeURIComponent(filterName)}` : ""}`);
+    navigate(
+      `/assets-details?page=${nextPage}${
+        filterName ? `&name=${encodeURIComponent(filterName)}` : ""
+      }`
+    );
   };
 
   const prevPage = () => {
     if (!pagination.has_previous) return;
     const prevPage = pagination.current_page - 1;
-    navigate(`/assets-details?page=${prevPage}${filterName ? `&name=${encodeURIComponent(filterName)}` : ""}`);
+    navigate(
+      `/assets-details?page=${prevPage}${
+        filterName ? `&name=${encodeURIComponent(filterName)}` : ""
+      }`
+    );
   };
 
   const handleViewDetails = (sn: number) => {
@@ -158,10 +164,7 @@ const AssetDetailsPage: React.FC = () => {
 
   const saveEditing = async (assetId: number) => {
     try {
-      const { data } = await api.put(
-        `/asset-details/${assetId}/`,
-        editData
-      );
+      const { data } = await api.put(`/asset-details/${assetId}/`, editData);
       setAssetData(
         assetData.map((asset) =>
           asset.Sn === assetId ? { ...asset, ...data } : asset
@@ -226,7 +229,7 @@ const AssetDetailsPage: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200 whitespace-nowrap">
             <thead className="bg-teal-500 text-white ">
               <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase">
                   SN
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold uppercase">
@@ -258,7 +261,10 @@ const AssetDetailsPage: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredAssets.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-8 text-gray-500 text-lg">
+                  <td
+                    colSpan={8}
+                    className="text-center py-8 text-gray-500 text-lg"
+                  >
                     No assets found
                   </td>
                 </tr>
@@ -268,32 +274,16 @@ const AssetDetailsPage: React.FC = () => {
                     key={asset.Sn}
                     className="hover:bg-gray-50 transition-colors"
                   >
-                     <td className="px-6 py-4 text-sm  text-teal-600 font-semibold">
-                      {editingId === asset.Sn ? (
-                        <input
-                          type="text"
-                          value={editData.AssetName ?? asset.AssetName}
-                          onChange={(e) => handleEditChange(e, "AssetName")}
-                          className="border rounded px-2 py-1"
-                        />
-                      ) : (
-                        asset.Sn
-                      )}
+                    <td className="px-6 py-4 text-sm text-teal-600 font-semibold">
+                      <div className=" px-2 py-1">{asset.Sn}</div>
                     </td>
-                    <td className="px-6 py-4 text-sm ">
-                      {editingId === asset.Sn ? (
-                        <input
-                          type="number"
-                          value={editData.Asset ?? asset.Asset}
-                          onChange={(e) => handleEditChange(e, "Asset")}
-                          className="border rounded px-2 py-1 w-20"
-                        />
-                      ) : (
-                        asset.Asset
-                      )}
+                    
+                    <td className="px-6 py-4 text-sm text-teal-600 font-semibold">
+                    <div className=" px-2 py-1">{asset.Asset}</div>
                     </td>
+
                     <td className="px-6 py-4 text-sm  text-teal-600 font-semibold">
-                      {editingId === asset.Sn ? (
+                      {/* {editingId === asset.Sn ? (
                         <input
                           type="text"
                           value={editData.AssetName ?? asset.AssetName}
@@ -302,7 +292,8 @@ const AssetDetailsPage: React.FC = () => {
                         />
                       ) : (
                         asset.AssetName
-                      )}
+                      )} */}
+                      <div className=" px-2 py-1">{asset.AssetName}</div>
                     </td>
                     <td className="px-6 py-4 text-sm">
                       {editingId === asset.Sn ? (
