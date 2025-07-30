@@ -162,12 +162,36 @@ const AssetDetailsPage: React.FC = () => {
     setEditData({});
   };
 
-  const saveEditing = async (assetId: number) => {
+  const saveEditing = async (Sn: number) => {
     try {
-      const { data } = await api.put(`/asset-details/${assetId}/`, editData);
+
+      // console.log("Full editData:", editData);
+
+      console.log("Full editData structure:", JSON.stringify(editData, null, 2));
+
+      const payload = {
+        Sn: Sn,
+        AssetId: editData.Asset,
+        AssetCode: editData.AssetCode,
+        Price: editData.Price,
+        PurchaseDate: editData.PurchaseDate,
+        Remark: editData.Remarks || editData.Remark,
+        Status: editData.Status
+      };
+
+      console.log("Final payload:", payload);
+  
+      // console.log("Sending payload:", payload); // Debug what's being sent
+
+      const { data } = await api.put(`/AssetDetail/Edit/${Sn}`, payload, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      // const { data } = await api.put(`/AssetDetail/Edit/${Sn}/`, editData);
       setAssetData(
         assetData.map((asset) =>
-          asset.Sn === assetId ? { ...asset, ...data } : asset
+          asset.Sn === Sn ? { ...asset, ...data } : asset
         )
       );
       setEditingId(null);
