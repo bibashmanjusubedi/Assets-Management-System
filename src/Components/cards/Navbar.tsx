@@ -4,7 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { ModeToggle } from "../theme-switch";
-import { api } from "@/lib/api"; 
+import { api } from "@/lib/api";
 import { ChevronDown, Search } from "lucide-react";
 
 type User = {
@@ -30,25 +30,59 @@ const Navbar = () => {
   const [passwordSuccess, setPasswordSuccess] = useState("");
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   try {
+  //     const storedUser = localStorage.getItem("user");
+  //     if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
+  //       const parsedUser = JSON.parse(storedUser);
+  //       if (parsedUser && typeof parsedUser === "object") {
+  //         setUser(parsedUser);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to parse user from localStorage:", error);
+  //   }
+  // }, []);
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser && typeof parsedUser === "object") {
-          setUser(parsedUser);
+    const loadUserFromStorage = () => {
+      try {
+        const storedUser = localStorage.getItem("user");
+
+        // More robust check for empty/undefined values
+        if (
+          !storedUser ||
+          storedUser === "undefined" ||
+          storedUser === "null"
+        ) {
+          return null;
         }
+
+        // Parse and validate
+        const parsed = JSON.parse(storedUser);
+
+        // Check if it's a string (if you store name directly)
+        // or object (if you store user object)
+        if (
+          typeof parsed === "string" ||
+          (parsed && typeof parsed === "object")
+        ) {
+          setUser(parsed);
+        } else {
+          console.warn("Unexpected user format in localStorage:", parsed);
+          localStorage.removeItem("user"); // Clean up invalid data
+        }
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+        localStorage.removeItem("user"); // Clean up corrupted data
       }
-    } catch (error) {
-      console.error("Failed to parse user from localStorage:", error);
-    }
+    };
+
+    loadUserFromStorage();
   }, []);
 
   const handleLogout = async () => {
     try {
-      await api.post(
-        "/user/logout/"
-      );
+      await api.post("/user/logout/");
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       navigate("/login");
@@ -73,13 +107,11 @@ const Navbar = () => {
       return;
     }
     try {
-
       await api.post(
         "user/change-password/",
         {
           old_password: oldPassword,
           new_password: newPassword,
-        
         },
         {
           headers: {
@@ -167,16 +199,19 @@ const Navbar = () => {
           />
         </div>
 
-       <div className="relative flex items-center gap-3 text-white font-medium ">
-  <ModeToggle />
-  <div
-    className="flex items-center cursor-pointer"
-    onClick={() => setShowDropdown(!showDropdown)}
-  >
-    <span className="mr-25">Welcome, {user?.name || "User"}</span>
-    <ChevronDown className="text-white text-sm" />
-  </div>
-  {/* ...dropdown... */}
+        <div className="relative flex items-center gap-3 text-white font-medium ">
+          <ModeToggle />
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => setShowDropdown(!showDropdown)}
+          >
+            {/* <span className="mr-25">Welcome, {user?.name || "User"}</span> */}
+            <span className="mr-25">
+              Welcome, {typeof user === "string" ? user : user?.name || "User"}
+            </span>
+            <ChevronDown className="text-white text-sm" />
+          </div>
+          {/* ...dropdown... */}
           {showDropdown && (
             <div className="absolute right-0 top-14 w-64 bg-white text-black rounded-lg shadow-xl  z-50 space-y-3 mr-10">
               <div className="border-b pb-2">
@@ -387,11 +422,8 @@ const Navbar = () => {
           )}
         </div>
       </div>
-</div>
-
-  
+    </div>
   );
 };
 
 export default Navbar;
-
