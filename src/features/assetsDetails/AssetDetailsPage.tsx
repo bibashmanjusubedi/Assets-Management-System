@@ -201,10 +201,10 @@ const AssetDetailsPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (assetId: number) => {
+  const handleDelete = async (Sn: number) => {
     try {
-      await api.delete(`/asset-details/${assetId}/`);
-      setAssetData(assetData.filter((asset) => asset.Sn !== assetId));
+      await api.delete(`/AssetDetail/Delete/${Sn}`);
+      setAssetData(assetData.filter((asset) => asset.Sn !== Sn));
       setIsDeleteConfirm(null);
     } catch (error) {
       console.error("Error deleting asset:", error);
