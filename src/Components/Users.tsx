@@ -404,7 +404,7 @@ interface Pagination {
   total_items?: number;
   total_pages?: number;
 }
-const USERS_Url = "/user/users/";
+const USERS_Url = "/Person/";
 
 export default function Users() {
   const [userData, setUserData] = useState<Users[]>([]);
@@ -422,8 +422,22 @@ export default function Users() {
       const { data }: { data: UserResponse } = await api.get(
         USERS_Url + `?page=${page || 1}`
       );
-      setUserData(data.results);
-      setPagination(data.pagination);
+       // Transform backend data to match frontend interface
+      const transformedData = data.map((person: any) => ({
+        id: person.pId,
+        username: person.name,
+        email: "", // Add if available or leave empty
+        first_name: person.name.split(' ')[0], // Or adjust as needed
+        last_name: person.name.split(' ')[1] || "", // Or adjust as needed
+        address: person.address,
+        phone_number: person.phone
+      }));
+      setUserData(transformedData);
+      // setPagination(data.pagination);
+      setPagination({
+        current_page: page ? parseInt(page) : 1,
+        // Add other pagination fields if available
+      });
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -482,6 +496,9 @@ export default function Users() {
                   SN
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase">
+                  PId
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase">
                   User Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase">
@@ -507,6 +524,9 @@ export default function Users() {
                   >
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {(pagination.current_page - 1) * pageSize + index + 1}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-teal-500 font-semibold">
+                      {user.id}
                     </td>
                     <td className="px-6 py-4 text-sm text-teal-500 font-semibold">
                       {user.username}
