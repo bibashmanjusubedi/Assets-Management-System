@@ -92,7 +92,7 @@ export default function AssetOutPage() {
           ReturnDate: item.returnDate,
           Remarks: item.remarks,
           AssetDetail: item.assetCode,
-          OutTo: item.pid,
+          OutTo: item.pId,
         }))
       );
       setPagination(data.pagination || {current_page:1, total_pages:1});
@@ -469,12 +469,13 @@ export default function AssetOutPage() {
           <table className="w-full text-sm text-left rounded-3xl">
             <thead className="text-white bg-teal-500 text-sm uppercase">
               <tr>
-                <th className="px-6 py-3">S.N.</th>
-                <th className="px-6 py-3">Out To</th>
+                <th className="px-6 py-3">Number</th>
+                <th className="px-6 py-3">SN</th>
+                <th className="px-6 py-3">Out To(personId)</th>
                 <th className="px-6 py-3">Outdate</th>
                 <th className="px-6 py-3">Date To Return</th>
                 <th className="px-6 py-3">Return Date</th>
-                <th className="px-6 py-3">Asset Detail</th>
+                <th className="px-6 py-3">Asset Code</th>
                 <th className="px-6 py-3">Remarks</th>
                 <th className="px-6 py-3">Action</th>
               </tr>
@@ -577,6 +578,7 @@ export default function AssetOutPage() {
                       </>
                     ) : (
                       <>
+                        <td className="px-6 py-4">{row.id}</td>
                         <td className="px-6 py-4">{row.OutTo}</td>
                         <td className="px-6 py-4">{row.Outdate}</td>
                         <td className="px-6 py-4">{row.DateToReturn}</td>
