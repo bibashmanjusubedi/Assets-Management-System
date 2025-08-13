@@ -11,7 +11,7 @@ interface Row {
   ReturnDate: string;
   Remarks: string;
   AssetDetail: string;
-  OutTo: string;
+  OutTo: number,
 }
 
 interface Asset {
@@ -48,7 +48,7 @@ function getAssetCode(assetId: string | number, assets: Asset[]) {
   return asset ? asset.AssetCode : String(assetId);
 }
 
-const ASSET_OUT_URL = "/asset-out/";
+const ASSET_OUT_URL = "/AssetOut/";
 const ASSET_DETAILS_URL = "/asset-details/";
 const USERS_URL = "/user/users/";
 
@@ -82,18 +82,20 @@ export default function AssetOutPage() {
   const fetchRows = useCallback(async () => {
     try {
       const { data } = await api.get(ASSET_OUT_URL + `?page=${page}`);
+      const items = Array.isArray(data) ? data : data.results; // support both formats
+      console.log(items);
       setRows(
-        data.results.map((item: any) => ({
-          id: item.Sn,
-          Outdate: item.Outdate,
-          DateToReturn: item.DateToReturn,
-          ReturnDate: item.ReturnDate,
-          Remarks: item.Remarks,
-          AssetDetail: item.AssetCodeName,
-          OutTo: item.OutToName,
+        items.map((item: any) => ({
+          id: item.sn,
+          Outdate: item.outDate,
+          DateToReturn: item.dateToReturn,
+          ReturnDate: item.returnDate,
+          Remarks: item.remarks,
+          AssetDetail: item.assetCode,
+          OutTo: item.pid,
         }))
       );
-      setPagination(data.pagination);
+      setPagination(data.pagination || {current_page:1, total_pages:1});
     } catch (error) {
       console.error("Error fetching asset-out rows:", error);
     }
@@ -277,6 +279,9 @@ export default function AssetOutPage() {
     setEditingId(null);
     setEditData({});
   };
+
+  console.log("rowdata",rows);
+  
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 ">
