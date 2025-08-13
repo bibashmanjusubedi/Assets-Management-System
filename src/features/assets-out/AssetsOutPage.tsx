@@ -471,7 +471,7 @@ export default function AssetOutPage() {
               <tr>
                 <th className="px-6 py-3">Number</th>
                 <th className="px-6 py-3">SN</th>
-                <th className="px-6 py-3">Out To(personId)</th>
+                <th className="px-6 py-3">Assigned To:Out To(personId)</th>
                 <th className="px-6 py-3">Outdate</th>
                 <th className="px-6 py-3">Date To Return</th>
                 <th className="px-6 py-3">Return Date</th>
