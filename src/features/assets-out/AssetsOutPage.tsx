@@ -12,6 +12,7 @@ interface Row {
   Remarks: string;
   AssetDetail: string;
   OutTo: number,
+  OutName:string,
 }
 
 interface Asset {
@@ -93,6 +94,7 @@ export default function AssetOutPage() {
           Remarks: item.remarks,
           AssetDetail: item.assetCode,
           OutTo: item.pId,
+          OutName: item.personName
         }))
       );
       setPagination(data.pagination || {current_page:1, total_pages:1});
@@ -579,7 +581,7 @@ export default function AssetOutPage() {
                     ) : (
                       <>
                         <td className="px-6 py-4">{row.id}</td>
-                        <td className="px-6 py-4">{row.OutTo}</td>
+                        <td className="px-6 py-4">{row.OutName}</td>
                         <td className="px-6 py-4">{row.Outdate}</td>
                         <td className="px-6 py-4">{row.DateToReturn}</td>
                         <td className="px-6 py-4">{row.ReturnDate}</td>
