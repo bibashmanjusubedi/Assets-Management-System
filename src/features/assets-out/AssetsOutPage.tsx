@@ -22,10 +22,8 @@ interface Asset {
 }
 
 interface User {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
+  pId: number;
+  name: string;
 }
 
 interface Pagination {
@@ -51,8 +49,8 @@ function getAssetCode(assetId: string | number, assets: Asset[]) {
 
 const ASSET_OUT_URL = "/AssetOut/";
 const ASSET_DETAILS_URL = "/asset-details/";
-const USERS_URL = "/user/users/";
-
+// const USERS_URL = "/user/users/";
+const USERS_URL = "/Person";
 export default function AssetOutPage() {
   const [rows, setRows] = useState<Row[]>([]);
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -116,8 +114,10 @@ export default function AssetOutPage() {
   // Fetch users
   const fetchUsers = useCallback(async () => {
     try {
+      console.log("fetching users");
       const { data } = await api.get(USERS_URL);
-      setUsers(Array.isArray(data.results) ? data.results : []);
+      console.log("fetched users");
+      setUsers(Array.isArray(data)? data : []);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -347,9 +347,10 @@ export default function AssetOutPage() {
                 >
                   <option value="">Select User</option>
                   {users.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {`${user.first_name} ${user.last_name}`.trim() ||
-                        user.username}
+                    <option key={user.pId} value={user.pId}>
+                      {/* {`${user.first_name} ${user.last_name}`.trim() ||
+                        user.username} */}
+                        {user.name}
                     </option>
                   ))}
                 </select>
