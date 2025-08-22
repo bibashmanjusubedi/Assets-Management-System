@@ -163,8 +163,8 @@ export default function AssetOutPage() {
       return;
     }
     const apiPayload = {
-      AssetDetail: Number(formData.AssetDetail),
-      OutTo: Number(formData.OutTo),
+      AssetDetail: formData.AssetDetail,
+      OutTo: formData.OutTo,
       Outdate: formData.Outdate,
       DateToReturn: formData.DateToReturn,
       ReturnDate: formData.ReturnDate,
@@ -172,7 +172,8 @@ export default function AssetOutPage() {
     };
 
     try {
-      const { data: newRow } = await api.post(ASSET_OUT_URL, apiPayload);
+      console.log("data to submit for assetOut");
+      const { data: newRow } = await api.post(ASSET_OUT_URL+"Create", apiPayload);
       newRow.OutTo = getUserName(newRow.OutTo, users);
       newRow.AssetDetail = getAssetCode(newRow.AssetDetail, assets);
 
