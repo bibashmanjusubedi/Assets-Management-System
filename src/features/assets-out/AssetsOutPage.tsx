@@ -16,9 +16,9 @@ interface Row {
 }
 
 interface Asset {
-  Asset: number;
-  AssetCode: string;
-  AssetName: string;
+  assetId:number,
+  assetCode: number;
+  name: string;
 }
 
 interface User {
@@ -48,7 +48,7 @@ function getAssetCode(assetId: string | number, assets: Asset[]) {
 }
 
 const ASSET_OUT_URL = "/AssetOut/";
-const ASSET_DETAILS_URL = "/asset-details/";
+const ASSET_DETAILS_URL = "/AssetDetail";
 // const USERS_URL = "/user/users/";
 const USERS_URL = "/Person";
 export default function AssetOutPage() {
@@ -105,7 +105,7 @@ export default function AssetOutPage() {
   const fetchAssets = useCallback(async () => {
     try {
       const { data } = await api.get(ASSET_DETAILS_URL);
-      setAssets(data.results);
+      setAssets(data);
     } catch (error) {
       console.error("Error fetching assets:", error);
     }
@@ -424,10 +424,10 @@ export default function AssetOutPage() {
                   <option value="">Select Asset</option>
                   {assets.map((asset) => (
                     <option
-                      key={`${asset.Asset}-${asset.AssetCode}`}
-                      value={asset.Asset}
+                      key={`${asset.name}-${asset.assetCode}`}
+                      value={asset.assetId}
                     >
-                      {asset.AssetCode}
+                      {asset.name}({asset.assetCode})
                     </option>
                   ))}
                 </select>
