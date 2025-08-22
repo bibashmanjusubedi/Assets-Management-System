@@ -45,7 +45,7 @@ function getUserName(userId: string | number, users: User[]) {
 
 function getAssetCode(assetId: string | number, assets: Asset[]) {
   const asset = assets.find((a) => String(a.Asset) === String(assetId));
-  return asset ? asset.AssetCode : String(assetId);
+  return asset ? asset.assetCode : String(assetId);
 }
 
 const ASSET_OUT_URL = "/AssetOut/";
@@ -83,7 +83,7 @@ export default function AssetOutPage() {
     try {
       const { data } = await api.get(ASSET_OUT_URL + `?page=${page}`);
       const items = Array.isArray(data) ? data : data.results; // support both formats
-      console.log(items);
+      // console.log(items);
       setRows(
         items.map((item: any) => ({
           sn:item.sn,
@@ -116,9 +116,9 @@ export default function AssetOutPage() {
   // Fetch users
   const fetchUsers = useCallback(async () => {
     try {
-      console.log("fetching users");
+      // console.log("fetching users");
       const { data } = await api.get(USERS_URL);
-      console.log("fetched users");
+      // console.log("fetched users");
       setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -174,7 +174,7 @@ export default function AssetOutPage() {
     };
 
     try {
-      console.log("data to submit for assetOut");
+      // console.log("data to submit for assetOut");
       const { data: newRow } = await api.post(
         ASSET_OUT_URL + "Create",
         apiPayload
@@ -264,7 +264,7 @@ export default function AssetOutPage() {
     };
     try {
       const { data: updatedRow } = await api.put(
-        `${ASSET_OUT_URL}$/Edit/{editingId}/`,
+        `${ASSET_OUT_URL}Edit/${editingId}`,
         apiPayload
       );
       updatedRow.OutTo = getUserName(updatedRow.OutTo, users);
@@ -288,7 +288,7 @@ export default function AssetOutPage() {
     setEditData({});
   };
 
-  console.log("rowdata", rows);
+  // console.log("rowdata", rows);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 ">
