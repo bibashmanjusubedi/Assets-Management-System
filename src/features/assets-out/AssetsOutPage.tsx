@@ -5,7 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { api } from "@/lib/api";
 
 interface Row {
-  sn:number;
+  sn: number;
   id: number;
   Outdate: string;
   DateToReturn: string;
@@ -86,7 +86,7 @@ export default function AssetOutPage() {
       // console.log(items);
       setRows(
         items.map((item: any) => ({
-          sn:item.sn,
+          sn: item.sn,
           id: item.sn,
           Outdate: item.outDate,
           DateToReturn: item.dateToReturn,
@@ -272,7 +272,21 @@ export default function AssetOutPage() {
 
       setRows(
         rows.map((row) =>
-          row.id === editingId ? { ...row, ...updatedRow } : row
+          // row.id === editingId ? { ...row, ...updatedRow } : row
+          row.id === editingId ? 
+          {
+                ...row,
+                Remarks: editData.Remarks || row.Remarks,
+                Outdate: editData.Outdate || row.Outdate,
+                DateToReturn: editData.DateToReturn || row.DateToReturn,
+                ReturnDate: editData.ReturnDate || row.ReturnDate,
+                AssetDetail: editData.AssetDetail
+                  ? getAssetCode(Number(editData.AssetDetail), assets)
+                  : row.AssetDetail,
+                OutTo: getUserName(Number(editData.OutTo), users),
+                OutName: getUserName(Number(editData.OutTo), users),
+          }
+          : row
         )
       );
       setEditingId(null);
@@ -500,9 +514,7 @@ export default function AssetOutPage() {
                     </td>
                     {editingId === row.id ? (
                       <>
-                        <td className="px-6 py-4">
-                          {editData.sn}
-                        </td>
+                        <td className="px-6 py-4">{editData.sn}</td>
 
                         <td className="px-6 py-4">
                           <select
