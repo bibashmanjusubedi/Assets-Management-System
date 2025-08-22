@@ -5,18 +5,19 @@ import { IoArrowBack } from "react-icons/io5";
 import { api } from "@/lib/api";
 
 interface Row {
+  sn:number;
   id: number;
   Outdate: string;
   DateToReturn: string;
   ReturnDate: string;
   Remarks: string;
   AssetDetail: string;
-  OutTo: number,
-  OutName:string,
+  OutTo: number;
+  OutName: string;
 }
 
 interface Asset {
-  assetId:number,
+  assetId: number;
   assetCode: number;
   name: string;
 }
@@ -85,6 +86,7 @@ export default function AssetOutPage() {
       console.log(items);
       setRows(
         items.map((item: any) => ({
+          sn:item.sn,
           id: item.sn,
           Outdate: item.outDate,
           DateToReturn: item.dateToReturn,
@@ -92,10 +94,10 @@ export default function AssetOutPage() {
           Remarks: item.remarks,
           AssetDetail: item.assetCode,
           OutTo: item.pId,
-          OutName: item.personName
+          OutName: item.personName,
         }))
       );
-      setPagination(data.pagination || {current_page:1, total_pages:1});
+      setPagination(data.pagination || { current_page: 1, total_pages: 1 });
     } catch (error) {
       console.error("Error fetching asset-out rows:", error);
     }
@@ -117,7 +119,7 @@ export default function AssetOutPage() {
       console.log("fetching users");
       const { data } = await api.get(USERS_URL);
       console.log("fetched users");
-      setUsers(Array.isArray(data)? data : []);
+      setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -173,7 +175,10 @@ export default function AssetOutPage() {
 
     try {
       console.log("data to submit for assetOut");
-      const { data: newRow } = await api.post(ASSET_OUT_URL+"Create", apiPayload);
+      const { data: newRow } = await api.post(
+        ASSET_OUT_URL + "Create",
+        apiPayload
+      );
       newRow.OutTo = getUserName(newRow.OutTo, users);
       newRow.AssetDetail = getAssetCode(newRow.AssetDetail, assets);
 
@@ -259,7 +264,7 @@ export default function AssetOutPage() {
     };
     try {
       const { data: updatedRow } = await api.put(
-        `${ASSET_OUT_URL}${editingId}/`,
+        `${ASSET_OUT_URL}$/Edit/{editingId}/`,
         apiPayload
       );
       updatedRow.OutTo = getUserName(updatedRow.OutTo, users);
@@ -283,8 +288,7 @@ export default function AssetOutPage() {
     setEditData({});
   };
 
-  console.log("rowdata",rows);
-  
+  console.log("rowdata", rows);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 ">
@@ -351,7 +355,7 @@ export default function AssetOutPage() {
                     <option key={user.pId} value={user.pId}>
                       {/* {`${user.first_name} ${user.last_name}`.trim() ||
                         user.username} */}
-                        {user.name}
+                      {user.name}
                     </option>
                   ))}
                 </select>
@@ -497,6 +501,10 @@ export default function AssetOutPage() {
                     {editingId === row.id ? (
                       <>
                         <td className="px-6 py-4">
+                          {editData.sn}
+                        </td>
+
+                        <td className="px-6 py-4">
                           <select
                             name="OutTo"
                             value={editData.OutTo || ""}
@@ -505,9 +513,10 @@ export default function AssetOutPage() {
                           >
                             <option value="">Select User</option>
                             {users.map((user) => (
-                              <option key={user.id} value={user.id}>
-                                {`${user.first_name} ${user.last_name}`.trim() ||
-                                  user.username}
+                              <option key={user.pId} value={user.pId}>
+                                {/* {`${user.first_name} ${user.last_name}`.trim() ||
+                                  user.username} */}
+                                {user.name}
                               </option>
                             ))}
                           </select>
@@ -549,10 +558,10 @@ export default function AssetOutPage() {
                             <option value="">Select Asset</option>
                             {assets.map((asset) => (
                               <option
-                                key={`${asset.Asset}-${asset.AssetCode}`}
-                                value={asset.Asset}
+                                key={`${asset.assetCode}-${asset.name}`}
+                                value={asset.assetCode}
                               >
-                                {asset.AssetCode}
+                                {asset.name}
                               </option>
                             ))}
                           </select>
