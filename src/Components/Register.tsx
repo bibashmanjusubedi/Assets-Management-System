@@ -14,21 +14,30 @@ export default function NewUsers() {
     e.preventDefault();
 
     const data = new FormData(e.currentTarget);
-    const formData = {
-      username: data.get("username"),
-      email: data.get("email"),
-      password: data.get("password"),
-      password2: data.get("password2"),
-      first_name: data.get("first_name"),
-      last_name: data.get("last_name"),
-      phone_number: data.get("phone_number"),
-      address: data.get("address"),
+    // const formData = {
+    //   username: data.get("username"),
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    //   password2: data.get("password2"),
+    //   first_name: data.get("first_name"),
+    //   last_name: data.get("last_name"),
+    //   phone_number: data.get("phone_number"),
+    //   address: data.get("address"),
+    // };
+    const formDataBackend = {
+      Name: `${data.get("first_name")} ${data.get("last_name")}`,
+      Address: data.get("address"),
+      Phone: data.get("phone_number"),
+      LoginID: Math.floor(Math.random() * 100) + 1, //0, // or whatever your backend requires
+      Password: data.get("password"),
+      Remarks: "nothing",
     };
-    console.log("form data", formData);
+    
+    // console.log("form data", formData);
     try {
       const response = await api.post(
-        "/user/register/",
-        JSON.stringify(formData),
+        "/auth/register",
+        JSON.stringify(formDataBackend),
         {
           headers: {
             "Content-Type": "application/json",
