@@ -57,10 +57,10 @@ export default function Login() {
             <p className="mb-6">Don't have an account?</p>
             <button
               type="button"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/newUsers")}
               className="border border-white px-6 py-2 rounded-full font-semibold hover:bg-white hover:text-blue-500 transition"
             >
-              Login
+              Register
             </button>
           </div>
 
