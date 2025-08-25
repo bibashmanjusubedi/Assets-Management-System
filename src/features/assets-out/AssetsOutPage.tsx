@@ -219,7 +219,7 @@ export default function AssetOutPage() {
   // Delete row
   const handleDeleteRow = async (id: number) => {
     try {
-      await api.delete(`${ASSET_OUT_URL}${id}/`);
+      await api.delete(`${ASSET_OUT_URL}Delete/${id}`);
       setRows(rows.filter((row) => row.id !== id));
       setOpenMenu(null);
       window.alert("Row deleted successfully.");
